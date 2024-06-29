@@ -1,99 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import aFront from "../assets/KM_AFront.jpg";
 import bLeft from "../assets/KE_AFront.jpg";
 import panda from "../assets/panda1.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-
-const reviewsData = [
-  {
-    id: 1,
-    title: "Great experience!",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
-    author: "John Doe",
-  },
-  {
-    id: 2,
-    title: "Excellent service",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
-    author: "Jane Smith",
-  },
-  {
-    id: 3,
-    title: "Highly recommended",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
-    author: "Alice Johnson",
-  },
-  {
-    id: 4,
-    title: "Very professional",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
-    author: "Michael Brown",
-  },
-  {
-    id: 5,
-    title: "Wonderful experience!",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
-    author: "Emma Davis",
-  },
-  {
-    id: 6,
-    title: "Friendly staff",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
-    author: "David Wilson",
-  },
-  {
-    id: 7,
-    title: "Impressive service",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
-    author: "Sophia Martinez",
-  },
-  {
-    id: 8,
-    title: "Lovely salon",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
-    author: "James Lee",
-  },
-  {
-    id: 9,
-    title: "Professional haircut",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
-    author: "Olivia Moore",
-  },
-  {
-    id: 10,
-    title: "Best salon in town",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
-    author: "William Taylor",
-  },
-  {
-    id: 11,
-    title: "Great experience!",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
-  },
-  {
-    id: 12,
-    title: "Excellent service",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
-  },
-];
+import Footer from "../components/Footer";
 
 const Home: React.FC = () => {
-  const [startIndex, setStartIndex] = React.useState(0);
+  const navigate = useNavigate();
+  const [startIndex, setStartIndex] = useState(0);
+  const [branchesStartIndex, setBranchesStartIndex] = useState(0);
+  const [branches, setBranches] = useState([]);
   const reviewsPerPage = 3;
+  const branchesPerPage = 3;
 
   const handleNextClick = () => {
     if (startIndex + reviewsPerPage < reviewsData.length) {
@@ -107,34 +28,52 @@ const Home: React.FC = () => {
     }
   };
 
+  const handleBranchesNextClick = () => {
+    if (branchesStartIndex + branchesPerPage < branches.length) {
+      setBranchesStartIndex(branchesStartIndex + branchesPerPage);
+    }
+  };
+
+  const handleBranchesPrevClick = () => {
+    if (branchesStartIndex - branchesPerPage >= 0) {
+      setBranchesStartIndex(branchesStartIndex - branchesPerPage);
+    }
+  };
+
   const displayedReviews = reviewsData.slice(
     startIndex,
     startIndex + reviewsPerPage
   );
 
-  const currentUser = async () => {
+  const displayedBranches = branches.slice(
+    branchesStartIndex,
+    branchesStartIndex + branchesPerPage
+  );
+
+  const fetchBranches = async () => {
     try {
-      const req = await fetch("http://localhost:5000/api/user/me", {
+      const req = await fetch("http://localhost:5000/api/branch", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
 
       const res = await req.json();
-      if (res.error) {
-        throw new Error(res.error);
-      }
-      console.log("Current user:", res);
+      if (res.error) throw new Error(res.error);
+      setBranches(res.data);
     } catch (err) {
-      console.error("Error getting current user:", err);
+      console.error(err);
     }
   };
 
   useEffect(() => {
-    currentUser();
+    fetchBranches();
   }, []);
+
+  useEffect(() => {
+    console.log(branches);
+  }, [branches]);
 
   return (
     <>
@@ -243,45 +182,44 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* --- BRANCHS */}
-      <section className="container mx-auto py-16">
-        <h2 className="text-2xl text-center">Our Branch</h2>
-        {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8"></div> */}
+      {/* --- BRANCHES */}
+      <section className="container mx-auto py-16 relative">
+        <h2 className="text-2xl text-center">Our Branches</h2>
         <div className="flex flex-wrap justify-center gap-4 mt-8">
-          {/* Branch content here */}
-          <div className="card card-compact bg-base-100 w-96 shadow-xl">
-            <figure>
-              <img src={aFront} alt="Shoes" />
-            </figure>
-            <div className="card-body">
-              <h2 className="card-title">Shoes!</h2>
-              <p>If a dog chews shoes whose shoes does he choose?</p>
+          {displayedBranches.map((branch, index) => (
+            <div key={index} className="card bg-base-100 w-96 shadow-xl">
+              <figure>
+                <img src={aFront} alt="Shoes" />
+              </figure>
+              <div className="card-body p-4">
+                <h2 className="card-title">{branch.name}</h2>
+                <p>{branch.address}</p>
+                <p>
+                  Open: {branch.open_time} - Close: {branch.close_time}
+                </p>
+                <button
+                  className="btn"
+                  onClick={() => navigate("/reservation")}>
+                  Reservation
+                </button>
+              </div>
             </div>
-          </div>
-
-          <div className="card card-compact bg-base-100 w-96 shadow-xl">
-            <figure>
-              <img src={aFront} alt="Shoes" />
-            </figure>
-            <div className="card-body">
-              <h2 className="card-title">Shoes!</h2>
-              <p>If a dog chews shoes whose shoes does he choose?</p>
-            </div>
-          </div>
-
-          <div className="card card-compact bg-base-100 w-96 shadow-xl">
-            <figure>
-              <img src={aFront} alt="Shoes" />
-            </figure>
-            <div className="card-body">
-              <h2 className="card-title">Shoes!</h2>
-              <p>If a dog chews shoes whose shoes does he choose?</p>
-              {/* <div className="card-actions justify-end">
-                <button className="btn btn-primary">Buy Now</button>
-              </div> */}
-            </div>
-          </div>
+          ))}
         </div>
+
+        <button
+          onClick={handleBranchesPrevClick}
+          className="badge badge-neutral p-4 font-bold rounded absolute left-0 top-1/2 transform -translate-y-1/2"
+          disabled={branchesStartIndex === 0}>
+          &lt;
+        </button>
+
+        <button
+          onClick={handleBranchesNextClick}
+          className="badge badge-neutral p-4 font-bold rounded absolute right-0 top-1/2 transform -translate-y-1/2"
+          disabled={branchesStartIndex + branchesPerPage >= branches.length}>
+          &gt;
+        </button>
       </section>
 
       {/* --- CONTACTS */}
@@ -306,47 +244,75 @@ const Home: React.FC = () => {
       </section>
 
       {/* --- FOOTER */}
-      <footer className="footer bg-neutral text-neutral-content p-10">
-        <aside>
-          <svg
-            width="50"
-            height="50"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-            fillRule="evenodd"
-            clipRule="evenodd"
-            className="fill-current">
-            <path d="M4 3h-2v-2h2v2zm2 0h4v-2h-4v2zm10-2v2h-8v-2h8zm2 0h2v2h-2v-2zm4 4v19h-24v-19h24zm-22 2h2v-2h-2v2zm20-2h-2v2h2v-2zm-20 4v13h20v-13h-20z"></path>
-          </svg>
-          <p>
-            KMSalon
-            <br />
-            Providing reliable hair cut service since 2023
-          </p>
-        </aside>
-        <div>
-          <span className="footer-title">Services</span>
-          <a className="link link-hover">Branding</a>
-          <a className="link link-hover">Design</a>
-          <a className="link link-hover">Marketing</a>
-          <a className="link link-hover">Advertisement</a>
-        </div>
-        <div>
-          <span className="footer-title">Company</span>
-          <a className="link link-hover">About us</a>
-          <a className="link link-hover">Contact</a>
-          <a className="link link-hover">Jobs</a>
-          <a className="link link-hover">Press kit</a>
-        </div>
-        <div>
-          <span className="footer-title">Legal</span>
-          <a className="link link-hover">Terms of use</a>
-          <a className="link link-hover">Privacy policy</a>
-          <a className="link link-hover">Cookie policy</a>
-        </div>
-      </footer>
+      <Footer />
     </>
   );
 };
 
 export default Home;
+
+const reviewsData = [
+  {
+    id: 1,
+    title: "Great experience!",
+    content:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
+    author: "John Doe",
+  },
+  {
+    id: 2,
+    title: "Excellent service",
+    content:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
+    author: "Jane Smith",
+  },
+  {
+    id: 3,
+    title: "Highly recommended",
+    content:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
+    author: "Alice Johnson",
+  },
+  {
+    id: 4,
+    title: "Very professional",
+    content:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
+    author: "Michael Brown",
+  },
+  {
+    id: 5,
+    title: "Wonderful experience!",
+    content:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
+    author: "Emma Davis",
+  },
+  {
+    id: 6,
+    title: "Friendly staff",
+    content:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
+    author: "David Wilson",
+  },
+  {
+    id: 7,
+    title: "Impressive service",
+    content:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
+    author: "Sophia Martinez",
+  },
+  {
+    id: 8,
+    title: "Lovely salon",
+    content:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
+    author: "James Lee",
+  },
+  {
+    id: 9,
+    title: "Professional haircut",
+    content:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
+    author: "Olivia Moore",
+  },
+];

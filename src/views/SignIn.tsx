@@ -32,9 +32,7 @@ const SignIn: React.FC = () => {
         throw new Error(res.error);
       }
 
-      // Simpan token di localStorage
-      localStorage.setItem("token", res.token);
-
+      localStorage.setItem("token", res.data);
       navigate("/");
     } catch (error) {
       console.error("Error during sign in:", error);

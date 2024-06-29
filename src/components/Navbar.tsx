@@ -1,14 +1,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handleNavigatePath = (path: string) => () => {
     navigate(path);
   };
+
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-base-100 ">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -74,12 +77,18 @@ const Navbar: React.FC = () => {
         </ul>
       </div>
       <div className="navbar-end">
-        <a className="btn mr-3" onClick={handleNavigatePath("/signup")}>
-          Register
-        </a>
-        <a className="btn" onClick={handleNavigatePath("/signin")}>
-          Login
-        </a>
+        {user ? (
+          <span className="mr-3">{user.fullname}</span>
+        ) : (
+          <>
+            <a className="btn mr-3" onClick={handleNavigatePath("/signup")}>
+              Register
+            </a>
+            <a className="btn" onClick={handleNavigatePath("/signin")}>
+              Login
+            </a>
+          </>
+        )}
       </div>
     </div>
   );

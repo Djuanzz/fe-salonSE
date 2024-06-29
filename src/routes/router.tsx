@@ -6,6 +6,7 @@ import SignUp from "../views/SignUp";
 import SignIn from "../views/SignIn";
 import Reservation from "../views/Reservation";
 import Review from "../views/Review";
+import AdminDashboard from "../views/admin/AdminDashboard";
 
 const router = createBrowserRouter([
   { path: "*", element: <NotFound /> },
@@ -14,6 +15,7 @@ const router = createBrowserRouter([
   { path: "/signin", element: <SignIn /> },
   { path: "/reservation", element: <Reservation /> },
   { path: "/reviews", element: <Review /> },
+  { path: "/admin", element: <AdminDashboard /> },
 ]);
 
 export default router;
