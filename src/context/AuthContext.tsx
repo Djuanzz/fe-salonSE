@@ -13,6 +13,7 @@ interface AuthProviderProps {
 interface User {
   id: string;
   fullname: string;
+  role: string;
 }
 
 const AuthContext = createContext<{ user: User | null }>({ user: null });

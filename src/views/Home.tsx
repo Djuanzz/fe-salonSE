@@ -4,9 +4,11 @@ import Navbar from "../components/Navbar";
 import aFront from "../assets/KM_AFront.jpg";
 import bLeft from "../assets/KE_AFront.jpg";
 import panda from "../assets/panda1.jpg";
+import barberShop from "../assets/barbershop.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import Footer from "../components/Footer";
+import { useAuth } from "../context/AuthContext";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -15,6 +17,7 @@ const Home: React.FC = () => {
   const [branches, setBranches] = useState([]);
   const reviewsPerPage = 3;
   const branchesPerPage = 3;
+  const { user } = useAuth();
 
   const handleNextClick = () => {
     if (startIndex + reviewsPerPage < reviewsData.length) {
@@ -75,6 +78,15 @@ const Home: React.FC = () => {
     console.log(branches);
   }, [branches]);
 
+  useEffect(() => {
+    console.log(user);
+    if (user) {
+      if (user.role === "ADMIN") {
+        navigate("/admin");
+      }
+    }
+  }, [user]);
+
   return (
     <>
       <Navbar />
@@ -82,7 +94,7 @@ const Home: React.FC = () => {
       {/* --- HERO */}
       <main className="hero bg-base-200 min-h-screen">
         <div className="hero-content flex-col lg:flex-row-reverse">
-          <img src={panda} className="rounded-lg max-w-lg shadow-2xl" />
+          <img src={barberShop} className="rounded-lg max-w-lg shadow-2xl" />
           <div>
             <h1 className="text-5xl font-bold">
               Beauty and Elegance Redefined
