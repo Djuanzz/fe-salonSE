@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <div className="navbar bg-base-100 sticky z-50">
+    <div className="navbar bg-base-100 fixed z-50">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -33,21 +33,16 @@ const Navbar: React.FC = () => {
             tabIndex={0}
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
             <li>
-              <a>Item 1</a>
+              <a>Home</a>
             </li>
             <li>
-              <a>Parent</a>
-              <ul className="p-2">
-                <li>
-                  <a>Submenu 1</a>
-                </li>
-                <li>
-                  <a>Submenu 2</a>
-                </li>
-              </ul>
+              <a>Service</a>
             </li>
             <li>
-              <a>Item 3</a>
+              <a>Branch</a>
+            </li>
+            <li>
+              <a>Contact</a>
             </li>
           </ul>
         </div>
@@ -56,23 +51,16 @@ const Navbar: React.FC = () => {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <a>Item 1</a>
+            <a>Home</a>
           </li>
           <li>
-            <details>
-              <summary>Parent</summary>
-              <ul className="p-2">
-                <li>
-                  <a>Submenu 1</a>
-                </li>
-                <li>
-                  <a>Submenu 2</a>
-                </li>
-              </ul>
-            </details>
+            <a>Service</a>
           </li>
           <li>
-            <a>Item 3</a>
+            <a>Branch</a>
+          </li>
+          <li>
+            <a>Contact</a>
           </li>
         </ul>
       </div>

@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import aFront from "../assets/KM_AFront.jpg";
-import bLeft from "../assets/KE_AFront.jpg";
-import panda from "../assets/panda1.jpg";
+import bLeft from "../assets/BS_AFront.jpeg";
 import barberShop from "../assets/barbershop.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faStar } from "@fortawesome/free-solid-svg-icons";
 import Footer from "../components/Footer";
 import { useAuth } from "../context/AuthContext";
 
@@ -117,10 +116,14 @@ const Home: React.FC = () => {
               <img src={bLeft} alt="Shoes" />
             </figure>
             <div className="card-body">
-              <h2 className="card-title">Shoes!</h2>
+              <h2 className="card-title">Haircut</h2>
               <p>If a dog chews shoes whose shoes does he choose?</p>
               <div className="card-actions justify-end">
-                <button className="btn btn-primary">Buy Now</button>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => navigate("/reservation")}>
+                  Reservation
+                </button>
               </div>
             </div>
           </div>
@@ -130,10 +133,14 @@ const Home: React.FC = () => {
               <img src={bLeft} alt="Shoes" />
             </figure>
             <div className="card-body">
-              <h2 className="card-title">Shoes!</h2>
+              <h2 className="card-title">Hair Coloring</h2>
               <p>If a dog chews shoes whose shoes does he choose?</p>
               <div className="card-actions justify-end">
-                <button className="btn btn-primary">Buy Now</button>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => navigate("/reservation")}>
+                  Reservation
+                </button>
               </div>
             </div>
           </div>
@@ -143,10 +150,14 @@ const Home: React.FC = () => {
               <img src={bLeft} alt="Shoes" />
             </figure>
             <div className="card-body">
-              <h2 className="card-title">Shoes!</h2>
+              <h2 className="card-title">Hair Spa</h2>
               <p>If a dog chews shoes whose shoes does he choose?</p>
               <div className="card-actions justify-end">
-                <button className="btn btn-primary">Buy Now</button>
+                <button
+                  className="btn btn-primary"
+                  onClick={() => navigate("/reservation")}>
+                  Reservation
+                </button>
               </div>
             </div>
           </div>
@@ -163,7 +174,15 @@ const Home: React.FC = () => {
             <div key={review.id} className="card bg-base-100 w-96 shadow-xl">
               <div className="card-body">
                 <h2 className="card-title">{review.title}</h2>
-                <p>{review.content}</p>
+                <div className="flex items-center mb-2">
+                  {Array.from({ length: 5 }, (_, index) => (
+                    <FontAwesomeIcon
+                      key={index}
+                      icon={faStar}
+                      className="text-yellow-500"
+                    />
+                  ))}
+                </div>
                 <div className="card-actions justify-end">
                   <div className="badge">- {review.author}</div>
                 </div>
@@ -267,64 +286,46 @@ const reviewsData = [
   {
     id: 1,
     title: "Great experience!",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
     author: "John Doe",
   },
   {
     id: 2,
     title: "Excellent service",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
     author: "Jane Smith",
   },
   {
     id: 3,
     title: "Highly recommended",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
     author: "Alice Johnson",
   },
   {
     id: 4,
     title: "Very professional",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
     author: "Michael Brown",
   },
   {
     id: 5,
     title: "Wonderful experience!",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
     author: "Emma Davis",
   },
   {
     id: 6,
     title: "Friendly staff",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
     author: "David Wilson",
   },
   {
     id: 7,
     title: "Impressive service",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
     author: "Sophia Martinez",
   },
   {
     id: 8,
     title: "Lovely salon",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
     author: "James Lee",
   },
   {
     id: 9,
     title: "Professional haircut",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut consectetur sapien.",
     author: "Olivia Moore",
   },
 ];
