@@ -1,6 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+type BranchType = {
+  id: number;
+  name: string;
+};
+
+type ServiceType = {
+  service: {
+    id: number;
+    name: string;
+    price: number;
+  };
+};
+
 const Reservation: React.FC = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -11,8 +24,8 @@ const Reservation: React.FC = () => {
     branch: "",
     service: "",
   });
-  const [branches, setBranches] = useState([]);
-  const [services, setServices] = useState([]);
+  const [branches, setBranches] = useState<BranchType[]>([]);
+  const [services, setServices] = useState<ServiceType[]>([]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -34,7 +47,7 @@ const Reservation: React.FC = () => {
       const reservationData = {
         customer_name: formData.fullname,
         customer_phone: formData.phone,
-        branch_id: formData.branch,
+        branch_id: parseInt(formData.branch), // Convert to number
         service_id: services.find(
           (service) => service.service.name === formData.service
         )?.service.id,
@@ -49,13 +62,11 @@ const Reservation: React.FC = () => {
         body: JSON.stringify(reservationData),
       });
 
-      // navigate("/signin");
-      // console.log(reservationData);
       if (!req.ok) throw new Error("Error during reservation");
       alert("Reservation created successfully");
       navigate("/");
     } catch (error) {
-      alert("you need to login first");
+      alert("Error during reservation. Please try again.");
       console.error("Error during reservation:", error);
     }
   };
@@ -73,7 +84,7 @@ const Reservation: React.FC = () => {
       if (res.error) throw new Error(res.error);
       setBranches(res.data);
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching branches:", err);
     }
   };
 
@@ -93,7 +104,7 @@ const Reservation: React.FC = () => {
       if (res.error) throw new Error(res.error);
       setServices(res.data);
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching services:", err);
     }
   };
 

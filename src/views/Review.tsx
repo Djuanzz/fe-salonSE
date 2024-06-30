@@ -2,8 +2,18 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar, faPlus } from "@fortawesome/free-solid-svg-icons";
 
+type ReviewType = {
+  id: number;
+  comment: string;
+  star: number;
+  user: {
+    id: number;
+    fullname: string;
+  };
+};
+
 const Review: React.FC = () => {
-  const [reviews, setReviews] = useState([]);
+  const [reviews, setReviews] = useState<ReviewType[]>([]); // Specify ReviewType[] as the type
   const [comment, setComment] = useState("");
   const [stars, setStars] = useState(0); // State to store the number of stars chosen
 

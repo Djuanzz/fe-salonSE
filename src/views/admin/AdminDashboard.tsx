@@ -4,8 +4,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 
+type BranchType = {
+  id: number;
+  name: string;
+  address: string;
+  open_time: string;
+  close_time: string;
+};
+
 const AdminDashboard: React.FC = () => {
-  const [branches, setBranches] = useState([]);
+  const [branches, setBranches] = useState<BranchType[]>([]);
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [openTime, setOpenTime] = useState("");
@@ -25,7 +33,7 @@ const AdminDashboard: React.FC = () => {
       if (res.error) throw new Error(res.error);
       setBranches(res.data);
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching branches:", err);
     }
   };
 
@@ -53,7 +61,7 @@ const AdminDashboard: React.FC = () => {
       setOpenTime("");
       setCloseTime("");
     } catch (err) {
-      console.error(err);
+      console.error("Error adding branch:", err);
     }
   };
 
@@ -67,19 +75,12 @@ const AdminDashboard: React.FC = () => {
     fetchBranches();
   }, []);
 
-  useEffect(() => {
-    console.log(branches);
-  }, [branches]);
-
   return (
     <div className="bg-base-200">
-      <div
-        className={
-          "navbar bg-base-100  text-2xl font-bold p-4 text-center flex justify-center sticky top-0 w-full z-50"
-        }>
-        <div className="">ADMIN DASHBOARD</div>
+      <div className="navbar bg-base-100 text-2xl font-bold p-4 text-center flex justify-center sticky top-0 w-full z-50">
+        ADMIN DASHBOARD
         <button
-          className={"badge badge-error fixed right-7 p-4 text-white"}
+          className="badge badge-error fixed right-7 p-4 text-white"
           onClick={logoutAdmin}>
           Logout
         </button>
@@ -102,13 +103,13 @@ const AdminDashboard: React.FC = () => {
       </div>
 
       <button
-        className={"btn btn-circle fixed text-xl bg-base-100 "}
+        className="btn btn-circle fixed text-xl bg-base-100"
         onClick={() => document.getElementById("my_modal_3").showModal()}
         style={{
           position: "fixed",
           bottom: "20px",
           right: "20px",
-          zIndex: 1000, // Ensure it's above other content
+          zIndex: 1000,
         }}>
         <FontAwesomeIcon icon={faPlus} />
       </button>
@@ -120,11 +121,10 @@ const AdminDashboard: React.FC = () => {
           position: "fixed",
           bottom: "20px",
           right: "20px",
-          zIndex: 1000, // Ensure it's above other content
+          zIndex: 1000,
         }}>
         <div className="modal-box">
           <form
-            method="dialog"
             onSubmit={(e) => {
               e.preventDefault();
               handleSubmitBranch();
@@ -178,7 +178,7 @@ const AdminDashboard: React.FC = () => {
               required
             />
             <div className="flex items-center justify-center">
-              <button type="submit" className="btn ">
+              <button type="submit" className="btn">
                 Create Branch
               </button>
             </div>
